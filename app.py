@@ -29,6 +29,11 @@ def load_csv(file):
 # Cache keyed on the URL string
 @st.cache_data
 def load_csv_from_url(url):
+    # GitHub "blob" page URLs point to an HTML page, not the raw file.
+    # Auto-convert them to the raw.githubusercontent.com equivalent so
+    # pasting a normal GitHub file link just works.
+    if "github.com" in url and "/blob/" in url:
+        url = url.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/")
     return pd.read_csv(url)
 
 
