@@ -26,26 +26,7 @@ def load_csv(file):
 # Cache keyed on the dataframe itself, avoids recomputing on every rerun
 @st.cache_resource(show_spinner=False)
 def generate_report(df):
-    # Correlations are cheap and worth having back. Interactions (pairwise
-    # scatter plots) are O(n^2) across columns and are the main reason the
-    # full explorative report was hanging/crashing on Streamlit Cloud's
-    # limited memory, so those stay off. Adjust further if needed.
-    return ProfileReport(
-        df,
-        title='Pandas Profiling Report',
-        correlations={
-            "auto": {"calculate": True},
-            "pearson": {"calculate": True},
-            "spearman": {"calculate": True},
-            "kendall": {"calculate": False},
-            "phi_k": {"calculate": False},
-            "cramers": {"calculate": False},
-        },
-        interactions=None,
-        missing_diagrams={"bar": True, "matrix": True, "heatmap": False, "dendrogram": False},
-        samples={"head": 5, "tail": 5},
-        duplicates=None,
-    )
+    return ProfileReport(df, title='Pandas Profiling Report', explorative=True)
 
 
 def show_report(df):
